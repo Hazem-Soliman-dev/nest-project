@@ -22,8 +22,8 @@ export class ProductsController {
   }
 
   @Get()
-  async findAll(@Query('search') search?: string) {
-    return this.productsService.findAll(search);
+  async findAll(@Query('search') search?: string, @Query('page') page?: number) {
+    return this.productsService.findAll(search, page);
   }
 
   @Get(':id')

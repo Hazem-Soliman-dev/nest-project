@@ -8,6 +8,7 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 import { Category, CategoryStatus } from './entities/category.entity';
 import { Like, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { isUUID } from 'class-validator';
 
 @Injectable()
 export class CategoriesService {
@@ -48,6 +49,9 @@ export class CategoriesService {
   }
 
   async findOne(id: string) {
+    if (!isUUID(id)) {
+      throw new BadRequestException('Invalid category ID');
+    }
     const category = await this.categoryRepository.findOne({ where: { id } });
     if (!category) {
       throw new NotFoundException('Category not found');
@@ -61,6 +65,9 @@ export class CategoriesService {
   }
 
   async update(id: string, updateCategoryDto: UpdateCategoryDto) {
+    if (!isUUID(id)) {
+      throw new BadRequestException('Invalid category ID');
+    }
     const category = await this.categoryRepository.update(
       id,
       updateCategoryDto,
@@ -76,6 +83,9 @@ export class CategoriesService {
   }
 
   async changeStatus(id: string) {
+    if (!isUUID(id)) {
+      throw new BadRequestException('Invalid category ID');
+    }
     const category = await this.categoryRepository.findOneBy({ id });
     if (!category) {
       throw new NotFoundException('Category not found');
@@ -96,6 +106,9 @@ export class CategoriesService {
   }
 
   async remove(id: string) {
+    if (!isUUID(id)) {
+      throw new BadRequestException('Invalid category ID');
+    }
     const category = await this.categoryRepository.findOneBy({ id });
     if (!category) {
       throw new NotFoundException('Category not found');

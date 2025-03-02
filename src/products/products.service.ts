@@ -8,6 +8,7 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { Product, ProductStatus } from './entities/product.entity';
 import { Repository, Like } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { isUUID } from 'class-validator';
 
 @Injectable()
 export class ProductsService {
@@ -29,10 +30,12 @@ export class ProductsService {
     };
   }
 
-  async findAll(search?: string) {
+  async findAll(search?: string, page?: number) {
     const products = await this.productRepository.find({
       where: search ? { name: Like(`%${search}%`) } : {},
       relations: ['category'],
+      skip: page ? (page - 1) * 5 : 0,
+      take: 5,
     });
 
     if (products.length === 0) {
@@ -48,6 +51,9 @@ export class ProductsService {
   }
 
   async findOne(id: string) {
+    if (!isUUID(id)) {
+      throw new BadRequestException('Invalid product ID');
+    }
     const product = await this.productRepository.findOne({ where: { id } });
     if (!product) {
       throw new NotFoundException('Product not found');
@@ -61,6 +67,9 @@ export class ProductsService {
   }
 
   async update(id: string, updateProductDto: UpdateProductDto) {
+    if (!isUUID(id)) {
+      throw new BadRequestException('Invalid product ID');
+    }
     const product = await this.productRepository.update(
       id,
       updateProductDto,
@@ -76,6 +85,9 @@ export class ProductsService {
   }
 
   async changeStatus(id: string) {
+    if (!isUUID(id)) {
+      throw new BadRequestException('Invalid product ID');
+    }
     const product = await this.productRepository.findOneBy({ id });
     if (!product) {
       throw new NotFoundException('Product not found');
@@ -96,6 +108,9 @@ export class ProductsService {
   }
 
   async remove(id: string) {
+    if (!isUUID(id)) {
+      throw new BadRequestException('Invalid product ID');
+    }
     const product = await this.productRepository.findOneBy({ id });
     if (!product) {
       throw new NotFoundException('Product not found');
