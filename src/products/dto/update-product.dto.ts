@@ -22,6 +22,10 @@ export class UpdateProductDto extends PartialType(CreateProductDto) {
 	image: string;
 
 	@IsOptional()
+	@IsNumber()
+	stockQuantity: number;
+
+	@IsOptional()
 	@IsString()
 	@IsUUID(undefined, { message: 'Category ID must be a valid id' })
 	categoryId: string;

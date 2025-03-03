@@ -19,6 +19,10 @@ export class CreateProductDto {
 	@IsString()
 	image: string;
 
+	@IsOptional()
+	@IsNumber()
+	stockQuantity: number;
+
 	@IsNotEmpty()
 	@IsString()
 	@IsUUID(undefined, { message: 'Category ID must be a valid id' })
