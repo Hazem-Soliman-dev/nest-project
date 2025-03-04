@@ -7,6 +7,8 @@ import {
 } from 'typeorm';
 import { Category } from '../../categories/entities/category.entity';
 import { Cart } from 'src/carts/entities/cart.entity';
+import { OrderItem } from 'src/orders/entities/order-item.entity';
+import { Review } from 'src/reviews/entities/review.entity';
 
 export enum ProductStatus {
   ACTIVE = 'Active',
@@ -42,6 +44,12 @@ export class Product {
 
   @OneToMany(() => Cart, (cart) => cart.product)
   cart: Cart[];
+
+  @OneToMany(() => OrderItem, (orderItem) => orderItem.product)
+  orderItems: OrderItem[];
+
+  @OneToMany(() => Review, (review) => review.product)
+  reviews: Review[];
 
   @Column({ default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;

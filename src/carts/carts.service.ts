@@ -19,6 +19,13 @@ export class CartsService {
     private userRepository: Repository<User>,
   ) {}
 
+  /**
+   * 1-check if product exists in database
+   * 2-check if user exists in database
+   * 3-check if cart item already exists for user and product
+   * 4-if exists: update quantity, if not: create new cart item
+   * 5-return success message with cart data
+   */
   async create(createCartDto: CreateCartDto) {
     const product = await this.productRepository.findOne({
       where: { id: createCartDto.productId },
@@ -64,6 +71,12 @@ export class CartsService {
     };
   }
 
+  /**
+   * 1-check if search parameter exists for filtering by product name
+   * 2-apply pagination if page parameter exists
+   * 3-fetch carts with related product and user data
+   * 4-return carts list or throw error if no carts found
+   */
   async findAll(search?: string, page?: number) {
     const carts = await this.cartRepository.find({
       ...(search
@@ -86,6 +99,11 @@ export class CartsService {
     };
   }
 
+  /**
+   * 1-validate if cart ID is provided
+   * 2-fetch cart by ID with related product and user data
+   * 3-return cart data or throw error if not found
+   */
   async findCart(id: string) {
     if (!id) {
       throw new BadRequestException('Cart ID is required');
@@ -104,6 +122,11 @@ export class CartsService {
     };
   }
 
+  /**
+   * 1-check if cart exists in database
+   * 2-update cart with new data
+   * 3-return success message with updated cart data
+   */
   async updateCart(id: string, updateCartDto: UpdateCartDto) {
     const cart = await this.cartRepository.findOne({
       where: { id },
@@ -119,6 +142,11 @@ export class CartsService {
     };
   }
 
+  /**
+   * 1-validate if cart ID is provided
+   * 2-delete cart from database
+   * 3-return success message or throw error if deletion failed
+   */
   async remove(id: string) {
     if (!id) {
       throw new BadRequestException('Cart ID is required');

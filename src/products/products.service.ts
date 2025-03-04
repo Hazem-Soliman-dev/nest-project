@@ -17,6 +17,12 @@ export class ProductsService {
     private productRepository: Repository<Product>,
   ) {}
 
+  /**
+   * 1-check if the data valid by dto/create-product.dto.ts validation file
+   * 2-create new product instance
+   * 3-save the product to database
+   * 4-return success message or throw error if creation failed
+   */
   async create(createProductDto: CreateProductDto) {
     const product = await this.productRepository.create(createProductDto);
     if (!product) {
@@ -30,6 +36,12 @@ export class ProductsService {
     };
   }
 
+  /**
+   * 1-check if search parameter exists for filtering
+   * 2-apply pagination if page parameter exists
+   * 3-fetch products with related category data
+   * 4-return products list or throw error if no products found
+   */
   async findAll(search?: string, page?: number) {
     const products = await this.productRepository.find({
       where: search ? { name: Like(`%${search}%`) } : {},
@@ -50,6 +62,11 @@ export class ProductsService {
     };
   }
 
+  /**
+   * 1-validate if the product ID is a valid UUID
+   * 2-fetch product by ID from database
+   * 3-return product data or throw error if not found
+   */
   async findOne(id: string) {
     if (!isUUID(id)) {
       throw new BadRequestException('Invalid product ID');
@@ -66,14 +83,17 @@ export class ProductsService {
     };
   }
 
+  /**
+   * 1-validate if the product ID is a valid UUID
+   * 2-check if the product exists in database
+   * 3-update the product with new data
+   * 4-return success message or throw error if update failed
+   */
   async update(id: string, updateProductDto: UpdateProductDto) {
     if (!isUUID(id)) {
       throw new BadRequestException('Invalid product ID');
     }
-    const product = await this.productRepository.update(
-      id,
-      updateProductDto,
-    );
+    const product = await this.productRepository.update(id, updateProductDto);
     if (!product) {
       throw new NotFoundException('Product not found');
     }
@@ -84,6 +104,12 @@ export class ProductsService {
     };
   }
 
+  /**
+   * 1-validate if the product ID is a valid UUID
+   * 2-check if the product exists in database
+   * 3-toggle product status between ACTIVE and INACTIVE
+   * 4-return success message with new status or throw error if update failed
+   */
   async changeStatus(id: string) {
     if (!isUUID(id)) {
       throw new BadRequestException('Invalid product ID');
@@ -107,6 +133,12 @@ export class ProductsService {
     };
   }
 
+  /**
+   * 1-validate if the product ID is a valid UUID
+   * 2-check if the product exists in database
+   * 3-update product status to DELETED
+   * 4-return success message or throw error if deletion failed
+   */
   async remove(id: string) {
     if (!isUUID(id)) {
       throw new BadRequestException('Invalid product ID');

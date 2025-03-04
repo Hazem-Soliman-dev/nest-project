@@ -19,6 +19,12 @@ export class UsersService {
     private jwtService: JwtService,
   ) {}
 
+  /**
+   * 1-check if user with email already exists
+   * 2-hash the password using bcrypt
+   * 3-save the new user to database
+   * 4-return user data or throw error if creation failed
+   */
   async signUp(signupUserDto: SignupUserDto) {
     const existingUser = await this.userRepository.findOne({
       where: { email: signupUserDto.email },
@@ -45,6 +51,12 @@ export class UsersService {
     };
   }
 
+  /**
+   * 1-check if user exists with provided email
+   * 2-validate password using bcrypt compare
+   * 3-generate JWT token with user data
+   * 4-return user data with token or throw error if credentials invalid
+   */
   async login(loginUserDto: LoginUserDto) {
     const user = await this.userRepository.findOne({
       where: { email: loginUserDto.email },
@@ -74,6 +86,12 @@ export class UsersService {
     };
   }
 
+  /**
+   * 1-check if search parameter exists for filtering
+   * 2-apply pagination if page parameter exists
+   * 3-fetch users with related cart data
+   * 4-return users list or throw error if no users found
+   */
   async findAll(search?: string, page?: number, limit: number = 5) {
     const users = await this.userRepository.find({
       ...(search
@@ -96,6 +114,10 @@ export class UsersService {
     };
   }
 
+  /**
+   * 1-fetch user by ID with related cart data
+   * 2-return user data or throw error if not found
+   */
   async findOne(id: string) {
     const user = await this.userRepository.findOne({
       where: { id },
@@ -113,6 +135,11 @@ export class UsersService {
     };
   }
 
+  /**
+   * 1-check if user exists in database
+   * 2-delete the user
+   * 3-return success message or throw error if deletion failed
+   */
   async remove(id: string) {
     const result = await this.userRepository.delete(id);
     if (!result.affected) {

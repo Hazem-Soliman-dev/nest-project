@@ -17,6 +17,12 @@ export class CategoriesService {
     private categoryRepository: Repository<Category>,
   ) {}
 
+  /**
+   * 1-check if the data valid by dto/create-category.dto.ts validation file
+   * 2-create new category instance
+   * 3-save the category to database
+   * 4-return success message or throw error if creation failed
+   */
   async create(createCategoryDto: CreateCategoryDto) {
     const category = await this.categoryRepository.create(createCategoryDto);
     if (!category) {
@@ -30,6 +36,11 @@ export class CategoriesService {
     };
   }
 
+  /**
+   * 1-check if search parameter exists for filtering
+   * 2-fetch only active categories with related products
+   * 3-return categories list or throw error if no categories found
+   */
   async findAll(search?: string) {
     const categories = await this.categoryRepository.find({
       where: search
@@ -48,6 +59,11 @@ export class CategoriesService {
     };
   }
 
+  /**
+   * 1-validate if the category ID is a valid UUID
+   * 2-fetch category by ID from database
+   * 3-return category data or throw error if not found
+   */
   async findOne(id: string) {
     if (!isUUID(id)) {
       throw new BadRequestException('Invalid category ID');
@@ -64,6 +80,12 @@ export class CategoriesService {
     };
   }
 
+  /**
+   * 1-validate if the category ID is a valid UUID
+   * 2-check if the category exists in database
+   * 3-update the category with new data
+   * 4-return success message or throw error if update failed
+   */
   async update(id: string, updateCategoryDto: UpdateCategoryDto) {
     if (!isUUID(id)) {
       throw new BadRequestException('Invalid category ID');
@@ -82,6 +104,12 @@ export class CategoriesService {
     };
   }
 
+  /**
+   * 1-validate if the category ID is a valid UUID
+   * 2-check if the category exists in database
+   * 3-toggle category status between ACTIVE and INACTIVE
+   * 4-return success message with new status or throw error if update failed
+   */
   async changeStatus(id: string) {
     if (!isUUID(id)) {
       throw new BadRequestException('Invalid category ID');
@@ -105,6 +133,12 @@ export class CategoriesService {
     };
   }
 
+  /**
+   * 1-validate if the category ID is a valid UUID
+   * 2-check if the category exists in database
+   * 3-update category status to DELETED
+   * 4-return success message or throw error if deletion failed
+   */
   async remove(id: string) {
     if (!isUUID(id)) {
       throw new BadRequestException('Invalid category ID');
