@@ -7,13 +7,17 @@ import {
   Query,
   Delete,
 } from '@nestjs/common';
-import { UsersService } from './users.service';
 import { SignupUserDto } from './dto/signup-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
+import { AuthService } from './services/auth/auth.service';
+import { UsersService } from './services/users/users.service';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly usersService: UsersService,
+  ) {}
 
   /**
    * take {
@@ -37,7 +41,7 @@ export class UsersController {
    */
   @Post('signup')
   signUp(@Body() signupUserDto: SignupUserDto) {
-    return this.usersService.signUp(signupUserDto);
+    return this.authService.signUp(signupUserDto);
   }
 
   /**
@@ -61,7 +65,7 @@ export class UsersController {
    */
   @Post('login')
   login(@Body() loginUserDto: LoginUserDto) {
-    return this.usersService.login(loginUserDto);
+    return this.authService.login(loginUserDto);
   }
 
   /**

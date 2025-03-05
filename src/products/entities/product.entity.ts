@@ -9,6 +9,7 @@ import { Category } from '../../categories/entities/category.entity';
 import { Cart } from 'src/carts/entities/cart.entity';
 import { OrderItem } from 'src/orders/entities/order-item.entity';
 import { Review } from 'src/reviews/entities/review.entity';
+import { Analytics } from 'src/analytics/entities/analytics.entity';
 
 export enum ProductStatus {
   ACTIVE = 'Active',
@@ -50,6 +51,9 @@ export class Product {
 
   @OneToMany(() => Review, (review) => review.product)
   reviews: Review[];
+
+  @ManyToOne(() => Analytics, (analytics) => analytics.products)
+  analytics: Analytics;
 
   @Column({ default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;

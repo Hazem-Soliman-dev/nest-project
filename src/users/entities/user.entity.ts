@@ -1,7 +1,8 @@
-import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, OneToMany, ManyToOne } from 'typeorm';
 import { Cart } from 'src/carts/entities/cart.entity';
 import { Order } from 'src/orders/entities/order.entity';
 import { Review } from 'src/reviews/entities/review.entity';
+import { Analytics } from 'src/analytics/entities/analytics.entity';
 
 export enum role {
   CUSTOMER = 'Customer',
@@ -34,6 +35,9 @@ export class User {
 
   @OneToMany(() => Review, (review) => review.user)
   reviews: Review[];
+
+  @ManyToOne(() => Analytics, (analytics) => analytics.users)
+  analytics: Analytics;
 
   @Column({ default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;

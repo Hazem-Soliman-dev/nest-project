@@ -1,4 +1,3 @@
-import { Product } from 'src/products/entities/product.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
   Entity,
@@ -8,6 +7,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { OrderItem } from './order-item.entity';
+import { Analytics } from 'src/analytics/entities/analytics.entity';
 
 export enum OrderStatus {
   PENDING = 'Pending',
@@ -37,6 +37,9 @@ export class Order {
     default: OrderStatus.PENDING,
   })
   status: OrderStatus;
+
+  @ManyToOne(() => Analytics, (analytics) => analytics.orders)
+  analytics: Analytics;
 
   @Column({ default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;

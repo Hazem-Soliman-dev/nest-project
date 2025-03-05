@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { UsersService } from './users.service';
+import { UsersService } from './services/users/users.service';
 import { UsersController } from './users.controller';
 import { User } from './entities/user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -8,10 +8,12 @@ import { ConfigService } from '@nestjs/config';
 import { Order } from 'src/orders/entities/order.entity';
 import { Cart } from 'src/carts/entities/cart.entity';
 import { Review } from 'src/reviews/entities/review.entity';
+import { Analytics } from 'src/analytics/entities/analytics.entity';
+import { AuthService } from './services/auth/auth.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, Order, Cart, Review]),
+    TypeOrmModule.forFeature([User, Order, Cart, Review, Analytics]),
     JwtModule.registerAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
@@ -21,6 +23,6 @@ import { Review } from 'src/reviews/entities/review.entity';
     }),
   ],
   controllers: [UsersController],
-  providers: [UsersService],
+  providers: [UsersService, AuthService],
 })
 export class UsersModule {}
